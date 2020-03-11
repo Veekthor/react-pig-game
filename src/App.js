@@ -114,21 +114,21 @@ const App = props =>  {
 
     return (
         <div className="wrapper clearfix">
-            <div className={`player-${0}-panel ${!activePlayer && winner === '' ? 'active' : null } ${winner === 0 ? 'winner': null}`}>
+            <div className={`player-${0}-panel ${activePlayer === 0 && winner === '' ? 'active' : null } ${winner === 0 ? 'winner': null}`}>
                 <div className="player-name" id={`name-${0}`}>{winner === 0 ? 'Winner!' : 'Player 1'}</div>
                 <div className="player-score" id={`score-${0}`}>{scores[0]}</div>
                 <div className="player-current-box">
                     <div className="player-current-label">Current</div>
-                    <div className="player-current-score" id={`current-${0}`}>{!activePlayer? roundScore : '0'}</div>
+                    <div className="player-current-score" id={`current-${0}`}>{activePlayer === 0? roundScore : '0'}</div>
                 </div>
             </div>
 
-            <div className={`player-${1}-panel ${activePlayer && winner === '' ? 'active' : null } ${winner === 1 ? 'winner': null}`}>
+            <div className={`player-${1}-panel ${activePlayer === 1 && winner === '' ? 'active' : null } ${winner === 1 ? 'winner': null}`}>
                 <div className="player-name" id={`name-${1}`}>{winner === 1 ? 'Winner!' : 'Player 2'}</div>
                 <div className="player-score" id={`score-${1}`}>{scores[1]}</div>
                 <div className="player-current-box">
                     <div className="player-current-label">Current</div>
-                    <div className="player-current-score" id={`current-${1}`}>{activePlayer? roundScore : '0'}</div>
+                    <div className="player-current-score" id={`current-${1}`}>{activePlayer === 1? roundScore : '0'}</div>
                 </div>
             </div> <h1>{roundScore}</h1>
             
