@@ -78,27 +78,31 @@ const App = props =>  {
         }
     }
 
-    const holdFunction = (currentPlayer) => {
+    const holdFunction = (currentPlayer, callback) => {
         //Add Current Score to global score based on current player
         const currentScore = scores[currentPlayer] + roundScore;
         currentPlayer?
         setScores(prevScores => [prevScores[0], currentScore]):
         setScores(prevScores => [currentScore, prevScores[1]]);
-
-        nextPlayer();
+        
+        checkWinner(currentPlayer, currentScore, nextPlayer);
+        // nextPlayer();
     }
 
-    const checkWinner = (currentPlayer, callback) =>{
-        if (scores[currentPlayer] >= 20){
+    const checkWinner = (currentPlayer, currentScore, callback) =>{
+        if (currentScore >= 20){
             setWinner(currentPlayer)
             setShowDice('none');
+        } else {
+            console.log(winner);
+            callback();
         }
 
     }
 
     return (
         <div className="wrapper clearfix">
-            <div className={`player-${0}-panel ${!activePlayer ? 'active' : null } ${winner === 0 ? 'winner': null}`}>
+            <div className={`player-${0}-panel ${!activePlayer && winner === '' ? 'active' : null } ${winner === 0 ? 'winner': null}`}>
                 <div className="player-name" id={`name-${0}`}>{winner === 0 ? 'Winner!' : 'Player 1'}</div>
                 <div className="player-score" id={`score-${0}`}>{scores[0]}</div>
                 <div className="player-current-box">
@@ -107,8 +111,8 @@ const App = props =>  {
                 </div>
             </div>
 
-            <div className={`player-${1}-panel ${activePlayer ? 'active' : null } ${winner === 1 ? 'winner': null}`}>
-                <div className="player-name" id={`name-${1}`}>Player 2</div>
+            <div className={`player-${1}-panel ${activePlayer && winner === '' ? 'active' : null } ${winner === 1 ? 'winner': null}`}>
+                <div className="player-name" id={`name-${1}`}>{winner === 1 ? 'Winner!' : 'Player 2'}</div>
                 <div className="player-score" id={`score-${1}`}>{scores[1]}</div>
                 <div className="player-current-box">
                     <div className="player-current-label">Current</div>
