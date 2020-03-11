@@ -21,7 +21,7 @@ const App = props =>  {
     const [scores, setScores] = useState([0, 0])
     const [activePlayer, setActivePlayer] = useState(0)
     const [roundScore, setRoundScore] = useState(0)
-    const [isGamePlaying, setIsGamePlaying] = useState(false)
+    const [isGamePlaying, setIsGamePlaying] = useState(true)
     const [showDice, setShowDice] = useState('none')
     const [diceImgSrc, setDiceImgSrc] = useState(['',''])
     const [winner, setWinner] = useState('');
@@ -35,66 +35,69 @@ const App = props =>  {
     }
 
     const rollDice = () => {
-        
+       if (isGamePlaying){
+            //Generate random dice values and store total
+            const random1 = Math.floor(Math.random() * 6) + 1;
+            const random2 = Math.floor(Math.random() * 6) + 1;
+            const totalRandom = random1 + random2;
 
-        //Generate random dice values and store total
-        const random1 = Math.floor(Math.random() * 6) + 1;
-        const random2 = Math.floor(Math.random() * 6) + 1;
-        const totalRandom = random1 + random2;
+            //get dice images and set Dice Image Src state
+            const dice = [getDiceValueImage(random1), getDiceValueImage(random2)]
+            setDiceImgSrc(dice);
 
-        //get dice images and set Dice Image Src state
-        const dice = [getDiceValueImage(random1), getDiceValueImage(random2)]
-        setDiceImgSrc(dice);
+            //set state to display dice
+            setShowDice('block');
 
-        //set state to display dice
-        setShowDice('block');
-
-        //Add roundscore if user does not roll a 1 on any dice else change player
-        if (random1 !== 1 && random2 !== 1){
-            setRoundScore(previous => previous + totalRandom)
-        } else {
-            console.log('You rolled 1')
-            nextPlayer();
-        }
-
-        //Get Dice Image source based on value generated
-        function getDiceValueImage (value) {
-            switch (value){
-                case 1:
-                    return dice1
-                case 2:
-                    return dice2
-                case 3:
-                    return dice3
-                case 4:
-                    return dice4
-                case 5:
-                    return dice5
-                case 6:
-                    return dice6
-                default:
-                    return null
+            //Add roundscore if user does not roll a 1 on any dice else change player
+            if (random1 !== 1 && random2 !== 1){
+                setRoundScore(previous => previous + totalRandom)
+            } else {
+                console.log('You rolled 1')
+                nextPlayer();
             }
-        }
+
+            //Get Dice Image source based on value generated
+            function getDiceValueImage (value) {
+                switch (value){
+                    case 1:
+                        return dice1
+                    case 2:
+                        return dice2
+                    case 3:
+                        return dice3
+                    case 4:
+                        return dice4
+                    case 5:
+                        return dice5
+                    case 6:
+                        return dice6
+                    default:
+                        return null
+                }
+            }
+       } 
+
+        
     }
 
-    const holdFunction = (currentPlayer, callback) => {
-        //Add Current Score to global score based on current player
-        const currentScore = scores[currentPlayer] + roundScore;
-        currentPlayer?
-        setScores(prevScores => [prevScores[0], currentScore]):
-        setScores(prevScores => [currentScore, prevScores[1]]);
-        
-        checkWinner(currentPlayer, currentScore, nextPlayer);
-        // nextPlayer();
+    const holdFunction = (currentPlayer) => {
+        if (isGamePlaying){
+            //Add Current Score to global score based on current player
+            const currentScore = scores[currentPlayer] + roundScore;
+            currentPlayer?
+            setScores(prevScores => [prevScores[0], currentScore]):
+            setScores(prevScores => [currentScore, prevScores[1]]);
+            
+            checkWinner(currentPlayer, currentScore, nextPlayer);
+        }
     }
 
     const checkWinner = (currentPlayer, currentScore, callback) =>{
         if (currentScore >= 20){
             setWinner(currentPlayer)
             setShowDice('none');
+            setIsGamePlaying(false);
         } else {
-            console.log(winner);
             callback();
         }
 
