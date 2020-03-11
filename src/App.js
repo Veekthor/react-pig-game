@@ -5,6 +5,7 @@ import dice3 from './images/dice-3.png'
 import dice4 from './images/dice-4.png'
 import dice5 from './images/dice-5.png'
 import dice6 from './images/dice-6.png'
+import ScoreBoard from './Components/ScoreBoard'
 
 const App = props =>  {
     // constructor(){
@@ -112,9 +113,21 @@ const App = props =>  {
         setWinner('');
     }
 
+    const scoreBoardComponents = ['Player 1', 'Player 2'].map((cur, index) =>{
+        return <ScoreBoard 
+                    key = {index}
+                    id = {index} 
+                    activePlayer = {activePlayer} 
+                    winner = {winner} 
+                    roundScore = {roundScore} 
+                    playerName = {cur}
+                    scores = {scores}
+                />
+    })
+
     return (
         <div className="wrapper clearfix">
-            <div className={`player-${0}-panel ${activePlayer === 0 && winner === '' ? 'active' : null } ${winner === 0 ? 'winner': null}`}>
+            {/* <div className={`player-${0}-panel ${activePlayer === 0 && winner === '' ? 'active' : null } ${winner === 0 ? 'winner': null}`}>
                 <div className="player-name" id={`name-${0}`}>{winner === 0 ? 'Winner!' : 'Player 1'}</div>
                 <div className="player-score" id={`score-${0}`}>{scores[0]}</div>
                 <div className="player-current-box">
@@ -130,7 +143,9 @@ const App = props =>  {
                     <div className="player-current-label">Current</div>
                     <div className="player-current-score" id={`current-${1}`}>{activePlayer === 1? roundScore : '0'}</div>
                 </div>
-            </div> <h1>{roundScore}</h1>
+            </div>  */}
+            {scoreBoardComponents}
+            <h1>{roundScore}</h1>
             
             <button className="btn-new" onClick = {init} ><i className="ion-ios-plus-outline"></i>New game</button>
             <button className="btn-roll" onClick = {rollDice} ><i className="ion-ios-loop"></i>Roll dice</button>
