@@ -26,7 +26,7 @@ const App = props =>  {
     const [diceImgSrc, setDiceImgSrc] = useState(['',''])
     const [winner, setWinner] = useState('');
 
-    const nextPlayer  = (index) => {// Move to Next player
+    const nextPlayer  = () => {// Move to Next player
         
         !activePlayer ? setActivePlayer(1) : setActivePlayer(0);
         setRoundScore(0);
@@ -76,8 +76,6 @@ const App = props =>  {
                 }
             }
        } 
-
-        
     }
 
     const holdFunction = (currentPlayer) => {
@@ -97,10 +95,21 @@ const App = props =>  {
             setWinner(currentPlayer)
             setShowDice('none');
             setIsGamePlaying(false);
+            setRoundScore(0);
         } else {
             callback();
         }
 
+    }
+
+    const init = () => {
+        setScores([0,0]);
+        setActivePlayer(0);
+        setRoundScore(0);
+        setIsGamePlaying(true);
+        setShowDice('none');
+        setDiceImgSrc(['','']);
+        setWinner('');
     }
 
     return (
@@ -123,16 +132,7 @@ const App = props =>  {
                 </div>
             </div> <h1>{roundScore}</h1>
             
-            {/* <div className="player-1-panel">
-                <div className="player-name" id="name-1">Player 2</div>
-                <div className="player-score" id="score-1">72</div>
-                <div className="player-current-box">
-                    <div className="player-current-label">Current</div>
-                    <div className="player-current-score" id="current-1">0</div>
-                </div>
-            </div> */}
-            
-            <button className="btn-new"><i className="ion-ios-plus-outline"></i>New game</button>
+            <button className="btn-new" onClick = {init} ><i className="ion-ios-plus-outline"></i>New game</button>
             <button className="btn-roll" onClick = {rollDice} ><i className="ion-ios-loop"></i>Roll dice</button>
             <button className="btn-hold" onClick = {holdFunction.bind(null, activePlayer)} ><i className="ion-ios-download-outline"></i>Hold</button>
             
