@@ -26,6 +26,8 @@ const App = props =>  {
     const [showDice, setShowDice] = useState('none')
     const [diceImgSrc, setDiceImgSrc] = useState(['',''])
     const [winner, setWinner] = useState('');
+    const [winScore, setWinScore] = useState('');
+    const [comment, setComment] = useState('');
 
     const nextPlayer  = () => {// Move to Next player
         
@@ -52,8 +54,10 @@ const App = props =>  {
             //Add roundscore if user does not roll a 1 on any dice else change player
             if (random1 !== 1 && random2 !== 1){
                 setRoundScore(previous => previous + totalRandom)
+                setComment('');
             } else {
-                console.log('You rolled 1')
+                const tempComment = `${!activePlayer ? 'Player 1' : 'Player 2'} rolled a 1.`
+                setComment(tempComment);
                 nextPlayer();
             }
 
@@ -92,7 +96,8 @@ const App = props =>  {
     }
 
     const checkWinner = (currentPlayer, currentScore, callback) =>{
-        if (currentScore >= 20){
+        const winningScore = winScore ? winScore : 20
+        if (currentScore >= winningScore){
             setWinner(currentPlayer)
             setShowDice('none');
             setIsGamePlaying(false);
@@ -102,6 +107,11 @@ const App = props =>  {
         }
 
     }
+
+    const customizeWinScore = event => {
+        const customWinScore = event.target.value;
+        setWinScore(customWinScore);
+    } 
 
     const init = () => {
         setScores([0,0]);
@@ -145,13 +155,13 @@ const App = props =>  {
                 </div>
             </div>  */}
             {scoreBoardComponents}
-            <h1>{roundScore}</h1>
+            <h4> Comments: Custom win score is {winScore ? winScore : 'undefined, default is 20'}. {comment} </h4>
             
             <button className="btn-new" onClick = {init} ><i className="ion-ios-plus-outline"></i>New game</button>
             <button className="btn-roll" onClick = {rollDice} ><i className="ion-ios-loop"></i>Roll dice</button>
             <button className="btn-hold" onClick = {holdFunction.bind(null, activePlayer)} ><i className="ion-ios-download-outline"></i>Hold</button>
             
-            <input type="number" placeholder="Final score" id="final-score" className="final-score"/>
+            <input type="number" placeholder="Custom win score" id="final-score" className="final-score" onChange = {customizeWinScore} value = {winScore} disabled = {winner === activePlayer ? true : false} />
 
             <img src={diceImgSrc[0]} alt="Dice" style = {{display: showDice}} className="dice" id="dice-1"/>
             <img src={diceImgSrc[1]} alt="Dice" style = {{display: showDice}} className="dice" id="dice-2"/>
